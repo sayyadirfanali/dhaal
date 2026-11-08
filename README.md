@@ -79,7 +79,7 @@ At ₹12,10,000, take-home (₹11,99,600) is less than at ₹12,00,000 (₹12,00
 ## Build
 
 ```bash
-git clone https://github.com/<you>/dhaal && cd dhaal
+git clone https://github.com/sayyadirfanali/dhaal && cd dhaal
 lake exe cache get   # downloads prebuilt Mathlib
 lake build
 ```
@@ -92,14 +92,13 @@ python3 validation.py
 python3 chart.py
 ```
 
-## Next steps
-
+## Next Steps
 - Surcharge and its marginal relief, at the surcharge thresholds (₹50L, ₹1Cr, …)
 - Rounding of tax to the nearest ₹10, which may create small cliffs of its own
 - A general theorem: any bracket schedule with rates in [0, 1] is cliff-free, and the exact condition under which a rebate plus cess stays cliff-free
 - Re-checking past budgets with the general theorem
 
-## How this was made
+## Authorship
 
 I read the statutes, made the modelling decisions and wrote the Lean proofs. I used Claude as a tutor for Lean tactics and Mathlib lemmas, and to draft the Python scripts and parts of this README.
 
