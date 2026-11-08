@@ -65,7 +65,7 @@ The supporting lemmas are in [`Dhaal/IncomeTax.lean`](Dhaal/IncomeTax.lean). `in
 
 Every figure below matches the [official tax calculator](https://www.incometax.gov.in) on the Income Tax e-filing portal. The same figures are Lean `example`s at the end of `Dhaal/IncomeTax.lean`, checked on every build. `validation.py` computes the full table of 40+ incomes with the same formulas.
 
-| Income | Base tax | Rebate | After rebate | Total tax (with cess) | Take-home |
+| Income | Base Tax | Rebate | After Rebate | Total Tax (with cess) | Take-Home |
 |---:|---:|---:|---:|---:|---:|
 | 10,00,000 | 40,000 | 40,000 | 0 | 0 | 10,00,000 |
 | 12,00,000 | 60,000 | 60,000 | 0 | 0 | 12,00,000 |

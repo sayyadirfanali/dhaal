@@ -182,7 +182,8 @@ theorem taxWithCess_cliff :
     simp only [taxWithCess, taxAfterRebate, taxBeforeRebate, rebate, incomeIn, incomeAbove]
     norm_num
 
-macro "tax_norm" : tactic => `(tactic| norm_num [taxWithCess, taxAfterRebate, taxBeforeRebate, rebate, incomeIn, incomeAbove])
+macro "tax_norm" : tactic =>
+  `(tactic| norm_num [taxWithCess, taxAfterRebate, taxBeforeRebate, rebate, incomeIn, incomeAbove])
 
 example : taxBeforeRebate  400000 =      0 := by tax_norm
 example : taxBeforeRebate  800000 =  20000 := by tax_norm
