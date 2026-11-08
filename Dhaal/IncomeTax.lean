@@ -134,12 +134,9 @@ lemma taxBeforeRebate_lipschitz {x y : ℚ} (h : x ≤ y) :
 
 -- rebate
 lemma rebate_nonneg (x : ℚ) : 0 ≤ rebate x := by
+  have := taxBeforeRebate_nonneg x
   simp only [rebate, min_def]
-  split_ifs
-  next => exact taxBeforeRebate_nonneg x
-  next => norm_num
-  next => linarith
-  next => norm_num
+  split_ifs <;> linarith
 
 -- taxAfterRebate
 lemma taxAfterRebate_of_le {x : ℚ} (hx : x ≤ 1200000) :
@@ -184,5 +181,35 @@ theorem taxWithCess_cliff :
     use 1200000, 1270000
     simp only [taxWithCess, taxAfterRebate, taxBeforeRebate, rebate, incomeIn, incomeAbove]
     norm_num
+
+macro "tax_norm" : tactic => `(tactic| norm_num [taxWithCess, taxAfterRebate, taxBeforeRebate, rebate, incomeIn, incomeAbove])
+
+example : taxBeforeRebate  400000 =      0 := by tax_norm
+example : taxBeforeRebate  800000 =  20000 := by tax_norm
+example : taxBeforeRebate 1200000 =  60000 := by tax_norm
+example : taxBeforeRebate 1600000 = 120000 := by tax_norm
+example : taxBeforeRebate 2000000 = 200000 := by tax_norm
+example : taxBeforeRebate 2400000 = 300000 := by tax_norm
+example : taxBeforeRebate 2500000 = 330000 := by tax_norm
+
+example : taxAfterRebate 1000000 = 0 := by tax_norm
+example : taxAfterRebate 1200000 = 0 := by tax_norm
+
+example : taxAfterRebate 1210000 = 10000 := by tax_norm
+example : taxAfterRebate 1270000 = 70000 := by tax_norm
+
+example : taxAfterRebate (1200000 + 1200000/17) = 1200000/17 := by tax_norm
+
+example : taxAfterRebate 1300000 = 75000 := by tax_norm
+
+example : taxWithCess 1000000 =      0 := by tax_norm
+example : taxWithCess 1200000 =      0 := by tax_norm
+example : taxWithCess 1200001 =  26/25 := by tax_norm   -- ₹1.04 on ₹1 more
+example : taxWithCess 1210000 =  10400 := by tax_norm
+example : taxWithCess 1270000 =  72800 := by tax_norm
+example : taxWithCess 1300000 =  78000 := by tax_norm
+example : taxWithCess 2500000 = 343200 := by tax_norm
+
+example : 1270000 - taxWithCess 1270000 = 1197200 := by tax_norm
 
 end Dhaal

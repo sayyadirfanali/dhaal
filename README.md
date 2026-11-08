@@ -19,15 +19,15 @@ The blue line is the rebate with marginal relief alone. It stays flat at zero, s
 The red line adds the 4% cess. Between ₹12,00,001 and ₹12,73,933, take-home pay is lower than at ₹12,00,000: earning more leaves you with less.
 
 ## Sources
+
 - **Slab rates:** Income-tax Act, 2025 (No. 30 of 2025), s.202(1)
 - **Rebate and marginal relief:** Income-tax Act, 2025 (No. 30 of 2025), s.156(2)
 - **Cess:** Finance Act, 2026 (No. 4 of 2026), s.2(6)
 
-## Acts
+Texts used:
+
 - [Income-tax Act, 2025, as amended by the Finance Act, 2026](https://www.incometaxindia.gov.in/documents/d/guest/income_tax_act_2025_as_amended_by_fa_act_2026-pdf) (Income Tax Department)
 - [Finance Act, 2026](https://egazette.gov.in/WriteReadData/2026/271439.pdf) (Gazette of India)
-
-Results checked against the [official tax calculator](https://www.incometax.gov.in).- Cess: Finance Act, 2026, s.2(6)
 
 ## Scope
 
@@ -40,17 +40,17 @@ Results checked against the [official tax calculator](https://www.incometax.gov.
 
 ```lean
 theorem taxBeforeRebate_lipschitz {x y : ℚ} (h : x ≤ y) :
-    taxBeforeRebate y - taxBeforeRebate x ≤ y - x
+    taxBeforeRebate y - taxBeforeRebate x ≤ 3 / 10 * (y - x)
 ```
 
-*For any incomes x ≤ y, slab tax rises by at most the rise in income.*
+*For any incomes x ≤ y, slab tax rises by at most 30% of the rise in income.*
 
 ```lean
 theorem taxAfterRebate_lipschitz {x y : ℚ} (h : x ≤ y) :
     taxAfterRebate y - taxAfterRebate x ≤ y - x
 ```
 
-*The same holds after the rebate: marginal relief prevents a cliff.*
+*After the rebate, tax rises by at most the rise in income: marginal relief prevents a cliff.*
 
 ```lean
 theorem taxWithCess_cliff :
@@ -59,16 +59,14 @@ theorem taxWithCess_cliff :
 
 *With cess, there are incomes where tax rises by more than income. From ₹12,00,000 to ₹12,70,000, income rises ₹70,000 and tax rises ₹72,800.*
 
-The supporting lemmas are in [`Dhaal/IncomeTax.lean`](Dhaal/IncomeTax.lean).
+The supporting lemmas are in [`Dhaal/IncomeTax.lean`](Dhaal/IncomeTax.lean). `incomeIn_lipschitz` is proved twice, once by case analysis and once as a `calc` chain, to show both styles.
 
 ## Validation
 
-The figures below are also Lean `example`s at the end of `Dhaal/IncomeTax.lean`, checked on every build. `validation.py` computes the full table of 40+ incomes with the same formulas.
+Every figure below matches the [official tax calculator](https://www.incometax.gov.in) on the Income Tax e-filing portal. The same figures are Lean `example`s at the end of `Dhaal/IncomeTax.lean`, checked on every build. `validation.py` computes the full table of 40+ incomes with the same formulas.
 
-Verified as per the official calculator from https://incometax.gov.in
-
-| Income | Base tax | Rebate | After Rebate | Total Tax (with cess) | Take-Home
-|---:|---:|---:|---:|---:|---:|---:|
+| Income | Base tax | Rebate | After rebate | Total tax (with cess) | Take-home |
+|---:|---:|---:|---:|---:|---:|
 | 10,00,000 | 40,000 | 40,000 | 0 | 0 | 10,00,000 |
 | 12,00,000 | 60,000 | 60,000 | 0 | 0 | 12,00,000 |
 | 12,10,000 | 61,500 | 51,500 | 10,000 | 10,400 | 11,99,600 |
@@ -96,7 +94,7 @@ python3 chart.py
 
 ## Next steps
 
-- Surcharge and its marginal relief (cliffs at ₹50L, ₹1Cr, …)
+- Surcharge and its marginal relief, at the surcharge thresholds (₹50L, ₹1Cr, …)
 - Rounding of tax to the nearest ₹10, which may create small cliffs of its own
 - A general theorem: any bracket schedule with rates in [0, 1] is cliff-free, and the exact condition under which a rebate plus cess stays cliff-free
 - Re-checking past budgets with the general theorem
@@ -113,4 +111,4 @@ Corrections are welcome, especially on how I've read the statute. Open an issue 
 
 ## License
 
-MIT
+[MIT](LICENSE)
