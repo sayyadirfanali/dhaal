@@ -202,4 +202,5 @@ W, H = fig.get_size_inches()
 outer = Bbox.from_bounds(-MARGIN, -MARGIN, W + 2 * MARGIN, H + 2 * MARGIN)
 
 fig.savefig("cliff_chart.svg", facecolor=SURFACE, bbox_inches=outer)
+fig.savefig("cliff_chart.png", dpi=240, facecolor=SURFACE, bbox_inches=outer)
 print(f"Saved cliff_chart.svg (font: {family})")
