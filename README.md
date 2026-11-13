@@ -25,9 +25,9 @@ The red line adds the 4% cess. Between ₹12,00,001 and ₹12,73,933, take-home 
 
 ## Sources
 
-- **Slab rates:** [Income Tax Act, 2025] (https://www.incometaxindia.gov.in/documents/d/guest/income_tax_act_2025_as_amended_by_fa_act_2026-pdf), s.202(1)
-- **Rebate and marginal relief:** Income Tax Act, 2025 (No. 30 of 2025), s.156(2)
-- **Cess:** [Finance Act, 2026] (https://egazette.gov.in/WriteReadData/2026/271439.pdf), s.2(6)
+- **Slabs :** [Income Tax Act, 2025](https://www.incometaxindia.gov.in/documents/d/guest/income_tax_act_2025_as_amended_by_fa_act_2026-pdf), s.202(1)
+- **Rebates:** Income Tax Act, 2025 (No. 30 of 2025), s.156(2)
+- **Cess:** [Finance Act, 2026](https://egazette.gov.in/WriteReadData/2026/271439.pdf), s.2(6)
 
 ## Theorems
 
