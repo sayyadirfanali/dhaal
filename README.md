@@ -1,9 +1,8 @@
 # Dhaal
 
-Dhaal is a Lean 4 model of the new tax regime under the Income Tax Act, 2025, for Tax Year 2026-27. It proves that the rebate's marginal relief removes the **tax cliff** at ₹12 lakh, and that the 4% cess brings it back.
-Both results are also proved in general, for any tax that never falls and never rises faster than income.
+Dhaal is a Lean 4 model of the rebate rules under new tax regime under the Income Tax Act, 2025, for Tax Year 2026-27.
 
-## Findings
+## Summary
 
 1. The rebate with marginal relief (under Income Tax Act, 2025, s.156) is **cliff-free**: for any incomes x ≤ y, the increase in tax is at most the increase in income.
 
@@ -11,9 +10,7 @@ Both results are also proved in general, for any tax that never falls and never 
 
 3. Generally, any rebate with marginal relief is cliff-free for any tax that never falls and never rises faster than income. But any positive cess charged on top of it brings a cliff back.
 
-The cliff-free results are proved in Lean for every income.
-
-The cliff results are proved by exhibiting a counterexample, also checked by Lean.
+The cliff absence is proved in Lean for every income and the cliff presence is proved by exhibiting a counterexample.
 
 ## Chart
 
@@ -35,7 +32,8 @@ The red line adds the 4% cess. Between ₹12,00,001 and ₹12,73,933, take-home 
 
 ```lean
 theorem baseTax_lipschitz (h : x ≤ y) (hk : 0 ≤ k)
-    (hthres : ThresAscending ((t, r) :: rest)) (hrate : RatesIn k ((t, r) :: rest)) :
+    (hthres : ThresAscending ((t, r) :: rest))
+    (hrate : RatesIn k ((t, r) :: rest)) :
     baseTax ((t, r) :: rest) y - baseTax ((t, r) :: rest) x ≤ k * (y - x)
 ```
 
