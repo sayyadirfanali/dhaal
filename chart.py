@@ -186,12 +186,10 @@ ax.spines["bottom"].set_color(GRID)
 fig.text(0.075, 0.955, f"Earn ₹{inr(worst_inc - BASE)} more, keep ₹{inr(abs(worst_gap))} less",
          fontsize=17, fontweight="semibold", color=INK, ha="left", va="top")
 fig.text(0.075, 0.895,
-         "India, new regime, Tax Year 2026-27. The rebate's marginal relief removes the cliff at ₹12 lakh;\n"
-         "the 4% cess, charged on top, brings it back with a marginal rate of 104%.",
+         "New Tax Regime (Tax Year 2026-27): marginal relief removes the cliff at ₹12 lakh but cess brings it back",
          fontsize=10, color=INK_2, ha="left", va="top", linespacing=1.4)
 fig.text(0.075, 0.02,
-         "Source: Income-tax Act 2025, ss. 156 & 202(1); Finance Act 2026, s. 2(6). "
-         "Rounding and surcharge ignored. Cliff proved in Lean 4 (Dhaal).",
+         "Source: Income-tax Act 2025, ss. 156 & 202(1); Finance Act 2026, s. 2(6). ",
          fontsize=8, color=INK_3, ha="left", va="bottom")
 
 fig.subplots_adjust(left=0.13, right=0.95, top=0.73, bottom=0.17)

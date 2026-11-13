@@ -5,14 +5,15 @@ Both results are also proved in general, for any tax that never falls and never 
 
 ## Findings
 
-> The rebate with marginal relief (Income Tax Act, 2025, s.156) is **cliff-free**: for any incomes x ≤ y, the increase in tax is at most the increase in income.
+1. The rebate with marginal relief (under Income Tax Act, 2025, s.156) is **cliff-free**: for any incomes x ≤ y, the increase in tax is at most the increase in income.
 
-> The Health and Education Cess (Finance Act, 2026, s.2(6)) **reintroduces a cliff** just above ₹12L, with a marginal tax rate of 104%. At worst, a taxpayer earning ₹12,70,588 takes home ₹2,824 less than one earning ₹12,00,000.
+2. The Health and Education Cess (under Finance Act, 2026, s.2(6)) **reintroduces a cliff** just above ₹12L, with a marginal tax rate of 104%.
 
-> In general: a rebate with marginal relief is cliff-free for any tax that never falls and never rises faster than income. **Any positive cess** charged on top of it brings a cliff back.
+3. Generally, any rebate with marginal relief is cliff-free for any tax that never falls and never rises faster than income. But any positive cess charged on top of it brings a cliff back.
 
 The cliff-free results are proved in Lean for every income.
-The cliff results are proved by exhibiting a pair of incomes, also checked by Lean.
+
+The cliff results are proved by exhibiting a counterexample, also checked by Lean.
 
 ## Chart
 
@@ -24,26 +25,9 @@ The red line adds the 4% cess. Between ₹12,00,001 and ₹12,73,933, take-home 
 
 ## Sources
 
-- **Slab rates:** Income Tax Act, 2025 (No. 30 of 2025), s.202(1)
+- **Slab rates:** [Income Tax Act, 2025] (https://www.incometaxindia.gov.in/documents/d/guest/income_tax_act_2025_as_amended_by_fa_act_2026-pdf), s.202(1)
 - **Rebate and marginal relief:** Income Tax Act, 2025 (No. 30 of 2025), s.156(2)
-- **Cess:** Finance Act, 2026 (No. 4 of 2026), s.2(6)
-
-Texts used:
-
-- [Income Tax Act, 2025, as amended by the Finance Act, 2026](https://www.incometaxindia.gov.in/documents/d/guest/income_tax_act_2025_as_amended_by_fa_act_2026-pdf) (Income Tax Department)
-- [Finance Act, 2026](https://egazette.gov.in/WriteReadData/2026/271439.pdf) (Gazette of India)
-
-## Scope
-
-- **Input:** taxable income, after the standard deduction.
-- **In scope:** new regime, individual taxpayer, slab rates, rebate with marginal relief, 4% cess.
-- **Out of scope:** surcharge, rounding of tax to the nearest ₹10, the old regime, special-rate income such as capital gains.
-- **Numbers:** exact rationals (ℚ), so every value can be computed and checked.
-
-## Files
-
-- [`Dhaal/General.lean`](Dhaal/General.lean): brackets, slab schedules, rebate and cess for any thresholds and rates.
-- [`Dhaal/India.lean`](Dhaal/India.lean): India's definitions, validation examples, and every result proved twice: `ViaDirect` (from the slabs) and `ViaGeneral` (as an instance of `General.lean`).
+- **Cess:** [Finance Act, 2026] (https://egazette.gov.in/WriteReadData/2026/271439.pdf), s.2(6)
 
 ## Theorems
 
@@ -102,7 +86,11 @@ theorem taxWithCess_cliff :
 
 ## Validation
 
-Every figure below matches the [official tax calculator](https://www.incometax.gov.in) on the Income Tax e-filing portal. The same figures are Lean `example`s in `Dhaal/India.lean`, checked on every build. `validation.py` computes the full table of 40+ incomes with the same formulas.
+Every figure below matches the [official tax calculator](https://www.incometax.gov.in) on the Income Tax e-filing portal.
+
+The same figures are present in `Dhaal/India.lean`, as examples checked on every build.
+
+`validation.py` computes the full table of 40+ incomes with the same formulas.
 
 | Income | Base Tax | Rebate | After Rebate | Total Tax (with cess) | Take-Home |
 |---:|---:|---:|---:|---:|---:|
@@ -113,13 +101,11 @@ Every figure below matches the [official tax calculator](https://www.incometax.g
 | 13,00,000 | 75,000 | 0 | 75,000 | 78,000 | 12,22,000 |
 | 25,00,000 | 3,30,000 | 0 | 3,30,000 | 3,43,200 | 21,56,800 |
 
-At ₹12,10,000, take-home (₹11,99,600) is less than at ₹12,00,000 (₹12,00,000). That is the cliff.
-
 ## Build
 
 ```bash
 git clone https://github.com/sayyadirfanali/dhaal && cd dhaal
-lake exe cache get   # downloads prebuilt Mathlib
+lake exe cache get # downloads prebuilt Mathlib
 lake build
 ```
 
@@ -131,19 +117,14 @@ python3 validation.py
 python3 chart.py
 ```
 
-## Next Steps
-- Surcharge and its marginal relief, at the surcharge thresholds (₹50L, ₹1Cr, …)
-- Rounding of tax to the nearest ₹10, which may create small cliffs of its own
-- Re-checking past budgets with the general theorem
-
 ## Authorship
 I read the statutes, made the modelling decisions and wrote most of the Lean proofs.
-I used Claude mostly to search Mathlib lemmas and to discuss Lean tactics.
-Claude also completed some of the general proofs and drafted the Python scripts and parts of this README.
+
+Claude helped with Mathlib lemmas, Lean tactics and completed some general proofs and drafted the Python scripts and some parts of the README.
 
 ## Contact
 
-Sayyad Irfan Ali · irfan@irfanali.org · [irfanali.org](https://irfanali.org)
+Irfan Ali | [irfanali.org](https://irfanali.org)
 
 Corrections are welcome, especially on how I've read the statute. Open an issue or email me.
 
