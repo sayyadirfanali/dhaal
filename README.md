@@ -1,59 +1,46 @@
-# Dhaal
+# dhaal
 
-Dhaal checks Indian income tax rules using **Lean 4** (a computer program that checks mathematical and logical proofs step by step).
-It models the new tax regime under the Income Tax Act, 2025, for Tax Year 2026-27.
+dhaal is a Lean 4 formalisation of Indian income tax rules.
 
-## Need
+I've modelled the new tax regime under the Income Tax Act, 2025 to explore properties of rebate rules with respect to **tax cliffs** especially when it interacts with cess.
 
-Suppose you earn ₹12,00,000 a year.  Under Section 156 of the Income Tax Act, 2025, you pay ₹0 in tax.
-Now suppose you get a ₹70,000 raise, bringing your income to ₹12,70,000. Your tax jumps from ₹0 to ₹72,800. You earned ₹70,000 more, yet your take-home pay fell by ₹2,800.
+## The Problem
 
-This problem is called a **tax cliff** (a sudden jump where earning more money leaves you with less after tax).
+Under Section 156 of the Income Tax Act, 2025, a rebate reduces tax on a total income of ₹12.0L to ₹0. But the 4% cess levied by the Finance Act, 2026, which expressly allows no marginal relief, creates a tax cliff: at ₹12.7L, total tax is ₹72.8k, leaving ₹2.8k less take-home pay than at ₹12.0L.
 
-Dhaal proves three facts about how these rules interact:
+Dhaal proves three structural facts about how these rules interact:
 
-1. **Marginal relief prevents a cliff on its own.** Under Section 156, **marginal relief** (a rule that caps your extra tax so it never exceeds the extra income you earned above the tax-free limit) keeps the tax system **cliff-free** (earning more never lowers your take-home pay).
-2. **The 4% cess brings the cliff back.** Under Section 2(6) of the Finance Act, 2026, the Health and Education Cess is added *after* the rebate and marginal relief are calculated. Because the cess is applied on top, any income between ₹12,00,001 and ₹12,73,933 leaves you with less take-home pay than earning ₹12,00,000. Between ₹12,00,000 and ₹12,70,000, the effective tax rate on that extra ₹70,000 is 104%.
-3. **This is a general structural rule.** Any rebate with marginal relief is cliff-free as long as the base tax never drops and never grows faster than income. However, charging any positive surcharge or cess on top of a capped tax always creates a cliff.
-
-## Visual Overview
+1. **Marginal relief prevents cliffs on its own.** Under Section 156, marginal relief caps extra tax so it never exceeds extra income above the ₹12.0L threshold, guaranteeing take-home pay never drops as total income rises.
+2. **The 4% cess reintroduces the cliff.** Under Section 2(6) of the Finance Act, 2026, the Health and Education Cess is levied *after* rebate and marginal relief. Consequently, any total income between **₹12.L and ₹12.73L** yields less take-home pay than ₹12.0L (an effective marginal tax rate of 104% up to ₹12.7L).
+3. **This holds for any tax system.** Any slab schedule with marginal relief is cliff-free as long as base tax is monotonic and 1-Lipschitz, whereas applying any positive proportional cess on top of a capped tax always creates a cliff.
 
 ![Tax cliff near ₹12 lakh](cliff_chart.svg)
-
-* **Blue line (tax after rebate and marginal relief):** Stays flat enough that take-home pay never drops as income rises.
-* **Red line (total tax with 4% cess):** Dips into a cliff between ₹12,00,001 and ₹12,73,933, where earning more leaves you with less.
+*Before cess (blue), take-home pay is non-decreasing. Adding the 4% cess (red) creates a net-income dip between ₹12.0L and ₹12.73L*
 
 ## Statutory Sources
 
-* **Tax slabs:** [Income Tax Act, 2025](https://www.incometaxindia.gov.in/documents/d/guest/income_tax_act_2025_as_amended_by_fa_act_2026-pdf), Section 202(1)
-* **Rebate and marginal relief:** Income Tax Act, 2025 (No. 30 of 2025), Section 156(2)
-* **Health and Education Cess (4%):** [Finance Act, 2026](https://egazette.gov.in/WriteReadData/2026/271439.pdf), Section 2(6)
+- **Tax slabs:** [Income Tax Act, 2025](https://www.incometaxindia.gov.in/documents/d/guest/income_tax_act_2025_as_amended_by_fa_act_2026-pdf), Section 202(1)
+- **Rebate and marginal relief:** Income Tax Act, 2025 (No. 30 of 2025), Section 156(2)
+- **Health and Education Cess (4%):** [Finance Act, 2026](https://egazette.gov.in/WriteReadData/2026/271439.pdf), Section 2(6)
 
-## What Is Proved
-
-In Lean 4, a **theorem** is a rule backed by a step-by-step logical proof that the computer has verified as 100% error-free.
-
-Dhaal splits its proofs into two files: general rules that apply to any tax system, and specific rules for India.
+## Formalised Theorems
 
 ### General Rules (`Dhaal/General.lean`)
-
-* **`baseTax_lipschitz`:** A progressive **tax slab** (income brackets taxed at increasing rates) never increases tax faster than the highest bracket rate. For example, if the top tax rate is 30%, a ₹100 raise adds at most ₹30 in base tax.
-* **`taxAfterRebate_lipschitz`:** A rebate with marginal relief is guaranteed to be cliff-free for *every* possible income, provided the maximum rebate covers the tax owed at the threshold.
-* **`withCess_cliff`:** Adding any positive cess on top of a tax with marginal relief always creates a cliff. The proof demonstrates this by providing a **witness** (a concrete pair of income numbers where the rule fails): an income right at the threshold and an income slightly above it.
+- **`baseTax_lipschitz`:** A slab schedule is Lipschitz continuous, with constant equal to any upper bound on its rates.
+- **`taxAfterRebate_lipschitz`:** A rebate with marginal relief is cliff-free across all incomes whenever the maximum rebate covers the tax at the threshold.
+- **`withCess_cliff`:** Applying any positive cess after marginal relief produces a cliff, proved by constructing a witness pair right at and just above the threshold.
 
 ### Indian Tax Rules (`Dhaal/India.lean`)
+- **`taxBeforeRebate_lipschitz`:** Under the 2026-27 slabs, base tax grows by at most 30% of any income increase.
+- **`taxAfterRebate_lipschitz`:** Before cess, Section 156 marginal relief guarantees zero tax cliffs at any income level.
+- **`taxWithCess_cliff`:** With the 4% cess included, a cliff occurs between ₹12.0L and ₹12.7L.
 
-* **`taxBeforeRebate_lipschitz`:** Under the 2026-27 slabs, base tax never rises by more than 30% of any income increase.
-* **`taxAfterRebate_lipschitz`:** Before cess is added, Section 156 marginal relief guarantees that no taxpayer faces a cliff at any income level.
-* **`taxWithCess_cliff`:** With the 4% cess included, a cliff exists. The proof uses a specific example: moving from ₹12,00,000 to ₹12,70,000 increases income by ₹70,000, while total tax increases by ₹72,800.
+(Note: The India results are proved twice, directly in `ViaDirect` and via the general theorems in `ViaGeneral`, as a reference for Lean learners.)
 
-*(NB: The proof that take-home pay never falls before cess—named `incomeIn_lipschitz`—is written twice in the code using two different proof styles to serve as a reference for Lean learners.)*
+## Empirical Validation
 
-## Checking Against Official Figures
-
-Every number in the table below matches the [official tax calculator](https://www.incometax.gov.in) on the Income Tax e-filing portal.
-These exact cases are also built into `Dhaal/India.lean` so the computer re-checks them every time the project builds.
-The file `validation.py` checks over 40 income points using the same formulas.
+All figures below match the [Income Tax e-filing portal calculator](https://www.incometax.gov.in) and are checked as Lean examples in Dhaal/India.lean on every build.
+`validation.py` tabulates 40+ further income points.
 
 | Income (₹) | Base Tax (₹) | Rebate (₹) | Tax After Rebate (₹) | Total Tax with 4% Cess (₹) | Take-Home Pay (₹) |
 |---:|---:|---:|---:|---:|---:|
@@ -64,40 +51,25 @@ The file `validation.py` checks over 40 income points using the same formulas.
 | 13,00,000 | 75,000 | 0 | 75,000 | 78,000 | 12,22,000 |
 | 25,00,000 | 3,30,000 | 0 | 3,30,000 | 3,43,200 | 21,56,800 |
 
-## How to Run the Project
+## Usage
 
-1. **Install and verify the Lean 4 proofs:**
-   ```bash
-   git clone [https://github.com/sayyadirfanali/dhaal](https://github.com/sayyadirfanali/dhaal) && cd dhaal
-   lake exe cache get   # Downloads prebuilt math libraries to save time
-   lake build           # Checks all legal and mathematical proofs
-   ```
+```bash
+# Verify Lean 4 proofs
+git clone [https://github.com/sayyadirfanali/dhaal](https://github.com/sayyadirfanali/dhaal) && cd dhaal
+lake exe cache get   # Fetch prebuilt Mathlib cache
+lake build           # Check all proofs
 
-2. **Regenerate the validation table and chart (optional):**
-   ```bash
-   pip install -r requirements.txt
-   python3 validation.py
-   python3 chart.py
-   ```
+# Regenerate validation data and chart (optional)
+pip install -r requirements.txt
+python3 validation.py && python3 chart.py
+```
 
 ## Authorship
 
-I read the statutes, made the modelling decisions, and wrote most of the Lean proofs.
-
-Claude helped with **Mathlib** lemmas, Lean proof steps, some general proofs, and drafted the Python scripts and the README.
-
-Gemini helped with the README editing.
-
-I have reviewed all definitions, proofs, and scripts and verified that they match the claims stated here.
+I read the statutes, made the model, and authored the core definitions and proofs. Claude and Gemini assisted with Mathlib lemmas, proof steps, Python scripts, and README. I have manually verified all definitions and proof statements against the statutory text.
 
 ## Contact
 
-Irfan Ali | [irfanali.org](https://irfanali.org)
+Irfan Ali | irfanali.org
 
-Corrections are welcome, especially regarding my reading of the statutes.
-
-Please open an issue on GitHub or email me.
-
-## License
-
-[MIT](LICENSE)
+Corrections are welcome, especially regarding my reading of the statutes. Please open a GitHub issue or email me.

@@ -1,13 +1,4 @@
 #!/usr/bin/env python3
-"""
-Dhaal – Cliff Chart
-
-Plots take-home pay relative to someone earning exactly ₹12,00,000,
-for taxable incomes from ₹11.9L to ₹12.9L (new regime, Tax Year 2026-27).
-Below zero means: you kept less than someone on ₹12L.
-
-Outputs cliff_chart.png (for LinkedIn / policy note) and cliff_chart.svg (for README).
-"""
 
 from fractions import Fraction
 

@@ -1,32 +1,18 @@
 #!/usr/bin/env python3
-"""
-Dhaal – Validation Script
-Computes personal income tax under India's new regime (Tax Year 2026-27)
-using the same formulas as the Lean model, for comparison with the
-official calculator at incometax.gov.in.
-
-Sections referenced:
-  - Income-tax Act 2025, s.202(1): slab rates
-  - Income-tax Act 2025, s.156:    rebate and marginal relief
-  - Finance Act 2026, s.2(6):      4% Health & Education Cess
-"""
 
 from fractions import Fraction
 from typing import NamedTuple
 
 
 def income_in(lo: Fraction, hi: Fraction, x: Fraction) -> Fraction:
-    """Portion of income x falling in bracket [lo, hi]."""
     return max(Fraction(0), min(x, hi) - lo)
 
 
 def income_above(lo: Fraction, x: Fraction) -> Fraction:
-    """Portion of income x above threshold lo."""
     return max(Fraction(0), x - lo)
 
 
 def tax_before_rebate(x: Fraction) -> Fraction:
-    """Slab tax under s.202(1), Income-tax Act 2025."""
     return (
         Fraction(5, 100)  * income_in(Fraction(400_000), Fraction(800_000), x)
       + Fraction(10, 100) * income_in(Fraction(800_000), Fraction(1_200_000), x)
@@ -38,7 +24,6 @@ def tax_before_rebate(x: Fraction) -> Fraction:
 
 
 def rebate(x: Fraction) -> Fraction:
-    """Rebate under s.156(2), Income-tax Act 2025."""
     t = tax_before_rebate(x)
     if x <= 1_200_000:
         return min(t, Fraction(60_000))          # s.156(2)(a)
@@ -53,7 +38,6 @@ def tax_after_rebate(x: Fraction) -> Fraction:
 
 
 def tax_with_cess(x: Fraction) -> Fraction:
-    """Total tax including 4% Health & Education Cess (Finance Act 2026, s.2(6))."""
     return (Fraction(1) + Fraction(4, 100)) * tax_after_rebate(x)
 
 
@@ -158,7 +142,7 @@ def main():
         )
 
         if r.marginal_rate_pct == r.marginal_rate_pct and r.marginal_rate_pct > 100:
-            line += "  ◄ CLIFF"
+            line += "  <- CLIFF"
             cliff_rows.append(r)
         print(line)
 
