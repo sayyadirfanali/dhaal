@@ -55,7 +55,7 @@ All figures below match the [Income Tax e-filing portal calculator](https://www.
 
 ```bash
 # Verify Lean 4 proofs
-git clone [https://github.com/sayyadirfanali/dhaal](https://github.com/sayyadirfanali/dhaal) && cd dhaal
+git clone https://github.com/sayyadirfanali/dhaal && cd dhaal
 lake exe cache get   # Fetch prebuilt Mathlib cache
 lake build           # Check all proofs
 
